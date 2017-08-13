@@ -12,7 +12,7 @@ int main()
     for (i = 0;;i = ++i % 8)
     {
         GPFDAT = LED_NUM(i);
-        for (j = 0; j < 100000; j++)
+        for (j = 0; j < 1000000; j++)
             ;
     }
     return 0;

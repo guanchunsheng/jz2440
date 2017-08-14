@@ -25,13 +25,13 @@ Reset:
 	msr cpsr_c,#0xd2		@ 进入中断模式，CPSR 11010010
 							@ 为什么不是cpsr，而是cpsr_c，因为cpsr_c表示cpsr的低8位
 							@ IF都设置上了，IRQ和FIQ屏蔽，模式10010，IRQ模式
-	ldr sp,3072				@ 设置IRQ模式的栈指针，见上文，寄存器的拷贝
+	ldr sp,=3072				@ 设置IRQ模式的栈指针，见上文，寄存器的拷贝
 	msr cpsr_c,#0xdf		@ 进入系统模式，模式11111
-	ldr dp,=4096			@ 设置系统模式的栈指针，CPU复位之后，处于系统模式
+	ldr sp,=4096			@ 设置系统模式的栈指针，CPU复位之后，处于系统模式
 	
 	bl init_led
 	bl init_irq
-	msr cpsr_c,#5f			@ 打开I，IRQ去掉屏蔽
+	msr cpsr_c,#0x5f			@ 打开I，IRQ去掉屏蔽
 	
 	ldr lr,=halt_loop
 	ldr pc,=main
@@ -45,4 +45,4 @@ HandleIRQ:
 	ldr lr,=int_return
 	ldr pc,=EINT_Handle		@ ISR例程，在interrupt.c中实现
 int_return:
-	ldmia sp!,{r0-r12,lr}^	@ 中断返回，^的意思是将SPSR恢复到CPSR 
+	ldmia sp!,{r0-r12,pc}^	@ 中断返回，^的意思是将SPSR恢复到CPSR 

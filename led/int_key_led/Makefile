@@ -1,5 +1,6 @@
 src := $(shell ls *.c *.s)
-obj := $(patsubst %.s %.c, %.o, $(src))
+obj := $(patsubst %.s, %.o, $(src))
+obj := $(patsubst %.c, %.o, $(obj))
 int_key_led.bin : $(obj)
 	arm-linux-ld -Ttext 0x00000000 $^ -o int_key_led_elf
 	arm-linux-objcopy -O binary -S int_key_led_elf int_key_led.bin

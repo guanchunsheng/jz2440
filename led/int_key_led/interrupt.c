@@ -5,7 +5,8 @@ void EINT_Handle()
     unsigned long oft = INTOFFSET;
     unsigned long val;
 	
-	GPFDAT = LED_NUM£®oft£©;
+	GPFDAT &= ~(LED_MSK(0) | LED_MSK(1) | LED_MSK(2));
+	GPFDAT |= LED_NUM(oft);
 
     //«Â÷–∂œ
     if( oft == 5 ) 
